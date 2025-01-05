@@ -1,21 +1,26 @@
+import { productService } from '@/services/product.service'
+
 export class ProductCache {
-    private cache: Map<string, Product> = new Map()
-  
-    async getProduct(barcode: string): Promise<Product> {
-      if (this.cache.has(barcode)) {
-        return this.cache.get(barcode)!
+  private offlineProducts: Map<string, any> = new Map()
+
+  async getProduct(barcode: string) {
+    const cachedProduct = this.offlineProducts.get(barcode)
+    if (cachedProduct) return cachedProduct
+
+    try {
+      const response = await productService.getProductByBarcode(barcode)
+      // Trả về trực tiếp response.data
+      if (response.data) {
+        this.offlineProducts.set(barcode, response.data)
+        return response.data
       }
-  
-      try {
-        const product = await fetch(`/api/products/${barcode}`).then(res => res.json())
-        this.cache.set(barcode, product)
-        return product
-      } catch (error) {
-        // Fallback to offline data if available
-        const offlineProduct = await this.getOfflineProduct(barcode)
-        if (offlineProduct) return offlineProduct
-        throw error
-      }
+      return null
+    } catch (error) {
+      return null
     }
   }
-  
+
+  getOfflineProduct(barcode: string) {
+    return this.offlineProducts.get(barcode) || null
+  }
+}

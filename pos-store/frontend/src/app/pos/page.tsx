@@ -22,56 +22,47 @@ export default function POSPage() {
   useHotkeys('ctrl+b', () => handleBulkScan())
   useHotkeys('esc', () => handleClearCart())
 
-  // Load saved cart on mount
   useEffect(() => {
-    playAdd()
     const savedCart = localStorage.getItem('cart')
     if (savedCart) {
       setCartItems(JSON.parse(savedCart))
     }
   }, [])
 
-  // Save cart when it changes
   useEffect(() => {
-    playAdd()
     localStorage.setItem('cart', JSON.stringify(cartItems))
   }, [cartItems])
 
   const handleProductSelect = (product: Product) => {
-    try {
-      const existingItemIndex = cartItems.findIndex(item => item._id === product._id)
-      
-      if (existingItemIndex !== -1) {
-        // Update existing product quantity
-        const updatedItems = [...cartItems]
-        updatedItems[existingItemIndex] = {
-          ...updatedItems[existingItemIndex],
-          quantity: (updatedItems[existingItemIndex].quantity || 1) + 1
-        }
-        setCartItems(updatedItems)
-      } else {
-        // Add new product to cart
-        setCartItems([...cartItems, { ...product, quantity: 1 }])
+    const existingItemIndex = cartItems.findIndex(item => item._id === product._id)
+    
+    if (existingItemIndex !== -1) {
+      const updatedItems = [...cartItems]
+      updatedItems[existingItemIndex] = {
+        ...updatedItems[existingItemIndex],
+        quantity: (updatedItems[existingItemIndex].quantity || 1) + 1
       }
-      
-      toast.success(`Đã thêm ${product.name}`)
-      playAdd()
-    } catch (error) {
-      toast.error('Không thể thêm sản phẩm')
-      playError()
+      setCartItems(updatedItems)
+    } else {
+      setCartItems(prev => [...prev, { ...product, quantity: 1 }])
     }
+    
+    playAdd()
+    toast.success(`Đã thêm ${product.name}`)
   }
 
   const handleBarcodeScan = async (barcode: string) => {
-    playBarcode()
     try {
       const product = await productCache.getProduct(barcode)
       if (product) {
         handleProductSelect(product)
+        playBarcode()
       } else {
+        playError()
         toast.error('Không tìm thấy sản phẩm')
       }
     } catch (error) {
+      playError()
       toast.error('Lỗi khi quét mã')
     }
   }
@@ -82,27 +73,24 @@ export default function POSPage() {
 
   const handleQuickSearch = () => {
     playClick()
-    // Implement quick search dialog
   }
 
   const handleBulkScan = () => {
     playClick()
-    // Implement bulk scanning mode
   }
 
   const handleClearCart = () => {
-    playClick()
     if (cartItems.length > 0) {
       const confirm = window.confirm('Xóa giỏ hàng?')
-      if (confirm) setCartItems([])
+      if (confirm) {
+        setCartItems([])
         playClick()
+      }
     }
   }
 
   const handlePaymentComplete = async () => {
     try {
-      // Process payment
-      // Print receipt
       setCartItems([])
       localStorage.removeItem('cart')
       playSuccess()
@@ -133,7 +121,10 @@ export default function POSPage() {
         <div className="col-span-8 xl:col-span-9 2xl:col-span-10">
           <div className="space-y-6">
             <div className="gap-4">
-              <BarcodeScanner onScan={handleBarcodeScan} />
+              <BarcodeScanner 
+                onScan={handleBarcodeScan}
+                onAddToCart={handleProductSelect}
+              />
             </div>
             
             <div className="bg-card rounded-lg">
@@ -154,7 +145,10 @@ export default function POSPage() {
           
           <div className="space-y-6">
             <QuickActions />
-            <PaymentPanel cart={cartItems as any} onPaymentComplete={handlePaymentComplete} />
+            <PaymentPanel 
+              cart={cartItems} 
+              onPaymentComplete={handlePaymentComplete} 
+            />
           </div>
         </div>
       </div>
