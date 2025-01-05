@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { productService } from '@/services/product.service'
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { barcode: string } }
 ) {
   try {
