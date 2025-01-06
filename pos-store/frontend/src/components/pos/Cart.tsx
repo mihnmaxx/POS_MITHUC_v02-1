@@ -103,14 +103,14 @@ export function Cart({ items, setItems }: CartProps) {
               <td className="py-2">
                 <Input
                   type="number"
-                  value={item.quantity ?? 1}
+                  value={item.stock_quantity ?? 1}
                   onChange={(e) => updateQuantity(item._id, e.target.value)}
                   min={1}
                   className="w-20"
                 />
               </td>
               <td className="py-2 text-right text-foreground">
-                {formatCurrency(item.price * (item.quantity ?? 1))}
+                {formatCurrency(item.price * (item.stock_quantity ?? 1))}
               </td>
               <td className="py-2">
                 <Button 

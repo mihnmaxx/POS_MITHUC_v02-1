@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { categoryService } from '@/services/category.service'
-import { UpdateCategoryRequest } from '@/types/api'
+import { Category } from '@/types/api'
 
 // Hook lấy danh sách categories
 export function useCategories(params?: any) {

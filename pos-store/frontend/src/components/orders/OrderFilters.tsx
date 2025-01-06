@@ -5,7 +5,22 @@ import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { Search, Filter } from 'lucide-react'
 
-export function OrderFilters({ filters, onFilterChange }: { filters: { search: string; status: string }; onFilterChange: (filters: { search: string; status: string }) => void }) {
+interface OrderFiltersProps {
+  filters: {
+    search: string
+    status: string
+    startDate: string
+    endDate: string
+  }
+  onFilterChange: (filters: {
+    search: string
+    status: string
+    startDate: string
+    endDate: string
+  }) => void
+}
+
+export function OrderFilters({ filters, onFilterChange }: OrderFiltersProps) {
   return (
     <div className="flex gap-4 items-center">
       <div className="flex-1 relative">

@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { PencilIcon } from 'lucide-react'
-
+import { Category } from '@/types/api'
 
 export default function ProductViewPage() {
   const { id } = useParams()
@@ -28,9 +28,9 @@ export default function ProductViewPage() {
       : '/images/default-product-light.png'
   }
 
-  const getProductImage = () => {
+  const getProductImage = (): string => {
     if (!product?.image_url) return getDefaultImage()
-    return uploadService.getImageUrl(product.image_url)
+    return uploadService.getImageUrl(product.image_url) || getDefaultImage()
   }
 
   const relatedProducts = productsData?.products
@@ -38,7 +38,7 @@ export default function ProductViewPage() {
     ?.slice(0, 4)
 
   const category = categoriesData?.categories?.find(
-    cat => cat._id === product?.category_id
+    (cat: Category) => cat._id === product?.category_id
   )
 
     if (isLoadingProduct || isLoadingProducts) {

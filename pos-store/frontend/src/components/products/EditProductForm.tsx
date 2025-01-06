@@ -101,7 +101,7 @@ export function EditProductForm({ product, onSubmit }: EditProductFormProps) {
                     <SelectValue placeholder="Chọn danh mục" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categoriesData?.categories.map(category => (
+                    {categoriesData?.categories.map((category: { _id: string; name: string }) => (
                       <SelectItem key={category._id} value={category._id}>
                         {category.name}
                       </SelectItem>

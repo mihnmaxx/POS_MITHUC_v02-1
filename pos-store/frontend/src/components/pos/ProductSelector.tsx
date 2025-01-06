@@ -37,7 +37,7 @@ export function ProductSelector({ onProductSelect }: ProductSelectorProps) {
         <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
           <TabsList className="w-full flex mb-4">
             <TabsTrigger value="all" className="flex-1">Tất cả</TabsTrigger>
-            {categoriesData?.categories?.map(category => (
+            {categoriesData?.categories?.map((category: { _id: string; name: string }) => (
               <TabsTrigger 
                 key={category._id} 
                 value={category._id}

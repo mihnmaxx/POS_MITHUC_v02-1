@@ -20,7 +20,7 @@ export function ProductDetail({ product, onEdit }: ProductDetailProps) {
         <div className="space-y-4">
           <div className="aspect-square w-full rounded-lg overflow-hidden border">
             <img 
-              src={product.image_url ? uploadService.getImageUrl(product.image_url) : '/placeholder-product.png'} 
+              src={product.image_url ? uploadService.getImageUrl(product.image_url) || '/placeholder-product.png' : '/placeholder-product.png'} 
               alt={product.name}
               className="w-full h-full object-cover"
             />

@@ -19,8 +19,12 @@ import { Label } from '../ui/label'
 import { useCategories } from '@/hooks/use-categories'
 import { useCreateProduct } from '@/hooks/use-products'
 
+interface ProductFormProps {
+  product?: Product
+  onSubmit: (data: any) => Promise<void>
+}
 
-export function ProductForm({ product }: { product?: Product }) {
+export const ProductForm: React.FC<ProductFormProps> = ({ product, onSubmit }) => {
   const { data } = useCategories()
   const router = useRouter()
   const { mutate: createProduct } = useCreateProduct()
@@ -42,7 +46,7 @@ export function ProductForm({ product }: { product?: Product }) {
     }
   })
   const [tempImage, setTempImage] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string>(product?.image_url ? uploadService.getImageUrl(product.image_url) : '')
+  const [preview, setPreview] = useState<string>(product?.image_url ? uploadService.getImageUrl(product.image_url) || '/placeholder-product.png' : '/placeholder-product.png')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [showCamera, setShowCamera] = useState(false)

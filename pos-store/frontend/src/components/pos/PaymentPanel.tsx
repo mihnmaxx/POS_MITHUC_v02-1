@@ -7,8 +7,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { toast } from 'sonner'
 import { Product } from '@/types/api'
 import useSound from 'use-sound'
-import { ReceiptPrinter } from './ReceiptPrinter'
+import { ReceiptPrinter, ReceiptPrinterRef } from './ReceiptPrinter'
 import { useRef, useState } from 'react'
+import { paymentService } from '@/services/payment.service'
 
 interface PaymentPanelProps {
   cart: Product[]
@@ -21,26 +22,28 @@ export function PaymentPanel({ cart, onPaymentComplete }: PaymentPanelProps) {
   const { mutate: processPayment } = useProcessPayment()
   const [showPrintDialog, setShowPrintDialog] = useState(false)
   const [currentOrder, setCurrentOrder] = useState(null)
-  const printerRef = useRef<ReceiptPrinter>(null)
+  const printerRef = useRef<ReceiptPrinterRef>(null)
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const total = cart.reduce((sum, item) => sum + item.price * item.stock_quantity, 0)
   const [playSuccess] = useSound('/sounds/beep-success.mp3')
   const [playError] = useSound('/sounds/beep-error.mp3')
 
-  const handlePayment = (method: string) => {
-    const selectedMethod = data?.methods?.find(m => m.id === method)
-    if (selectedMethod?.min_amount && total < selectedMethod.min_amount) {
-      toast.error(`Số tiền tối thiểu là ${selectedMethod.min_amount.toLocaleString()}đ`)
+  const handlePayment = async (method: string) => {
+    const { data } = await paymentService.getPaymentMethods()
+    const paymentMethod = Array.isArray(data) ? data.find(m => m.id === method) : null
+
+    if (paymentMethod?.min_amount && total < paymentMethod.min_amount) {
+      toast.error(`Số tiền tối thiểu là ${paymentMethod.min_amount.toLocaleString()}đ`)
       return
     }
-  
+
     createOrder(
       {
         items: cart.map(item => ({
           product_id: item._id,
           name: item.name,
           price: item.price,
-          quantity: item.quantity
+          quantity: item.stock_quantity
         })),
         payment_method: method
       },
@@ -49,7 +52,7 @@ export function PaymentPanel({ cart, onPaymentComplete }: PaymentPanelProps) {
           console.log('Order Response:', response)
           const orderNumber = response.data.order_number
           console.log('Order Number:', orderNumber)
-          setCurrentOrder(response.data)
+          setCurrentOrder(response.data as any)
           setShowPrintDialog(true)
           processPayment(
             {
@@ -71,8 +74,7 @@ export function PaymentPanel({ cart, onPaymentComplete }: PaymentPanelProps) {
               }
             }
           )
-        },
-        onError: () => {
+        },        onError: () => {
           toast.error('Tạo đơn hàng thất bại')
           playError()
         }

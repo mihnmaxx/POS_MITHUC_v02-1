@@ -46,14 +46,21 @@ export function OrderList({ filters }: OrderListProps) {
             </TableRow>
             </TableHeader>
             <TableBody>
-            {orders?.map((order) => (
+            {orders?.map((order: {
+                _id: string
+                order_number: string
+                created_at: string | number | Date
+                total: number
+                status: 'completed' | 'pending' | 'cancelled'
+                payment_status: 'paid' | 'pending' | 'refunded'
+            }) => (
                 <TableRow 
                 key={order._id} 
                 className="cursor-pointer hover:bg-muted/50"
                 onClick={() => router.push(`/orders/number/${order.order_number}`)}
                 >
                 <TableCell>{order.order_number}</TableCell>
-                <TableCell>{formatDateTime(order.created_at)}</TableCell>
+                <TableCell>{formatDateTime(order.created_at.toString())}</TableCell>
                 <TableCell className="text-right">{formatCurrency(order.total)}</TableCell>
                 <TableCell>
                     <OrderStatusBadge status={order.status} />
@@ -67,10 +74,12 @@ export function OrderList({ filters }: OrderListProps) {
         </Table>
     </div>
   )
-}function OrderStatusBadge({ status }: { status: 'completed' | 'pending' | 'cancelled' }) {
-  const variants: { [key: string]: string } = {
-    completed: "success",
-    pending: "warning",
+}
+
+function OrderStatusBadge({ status }: { status: 'completed' | 'pending' | 'cancelled' }) {
+  const variants: { [key: string]: "default" | "secondary" | "destructive" | "outline" } = {
+    completed: "default",
+    pending: "secondary",
     cancelled: "destructive"
   }
 
@@ -105,7 +114,9 @@ function PaymentStatusBadge({ status }: { status: 'paid' | 'pending' | 'refunded
       {labels[status]}
     </Badge>
   )
-}function OrderListSkeleton() {
+}
+
+function OrderListSkeleton() {
   return (
     <div className="rounded-md border">
       <Table>

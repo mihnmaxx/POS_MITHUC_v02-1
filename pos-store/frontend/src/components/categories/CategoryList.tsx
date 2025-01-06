@@ -1,6 +1,7 @@
 import { useCategories } from '@/hooks/use-categories'
 import { Skeleton } from '../ui/skeleton'
 import { CategoryCard } from './CategoryCard'
+import { Category } from '@/types/api'
 
 interface CategoryListProps {
   searchTerm: string
@@ -26,7 +27,7 @@ export function CategoryList({ searchTerm }: CategoryListProps) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {data?.categories.map((category) => (
+      {data?.categories.map((category: Category) => (
         <div key={category._id} className="h-[130px]">
           <CategoryCard
             category={category}

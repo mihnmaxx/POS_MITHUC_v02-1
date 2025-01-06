@@ -9,10 +9,11 @@ class Config:
     HOSTNAME = os.getenv('HOSTNAME', 'http://localhost:5000')
 
     # Basic Config
-    DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+    DEBUG = os.getenv('DEBUG', 'False')
     HOST = os.getenv('HOST', '0.0.0.0')
     PORT = int(os.getenv('PORT', 5000))
     TIMEZONE = os.getenv('TIMEZONE', 'Asia/Ho_Chi_Minh')
+    ENV = os.getenv('ENV', 'development')
 
     # MongoDB Config
     MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/pos')
@@ -37,6 +38,7 @@ class Config:
     MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'your@gmail.com')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'password')
     MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', 'true')
+    MAIL_DEBUG = os.getenv('MAIL_DEBUG', 'False')
 
     REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
     REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))

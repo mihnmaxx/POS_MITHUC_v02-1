@@ -5,7 +5,7 @@ from app.services import CategoryService
 import logging
 
 # Initialize logger
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 category_ns = Namespace('categories', description='Category operations')

@@ -5,10 +5,11 @@ load_dotenv()
 
 class Config:
     # Basic Config
-    DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+    DEBUG = os.getenv('DEBUG', 'False')
     HOST = os.getenv('HOST', '0.0.0.0')
     PORT = int(os.getenv('PORT', 5000))
     TIMEZONE = os.getenv('TIMEZONE', 'Asia/Ho_Chi_Minh')
+    ENV = os.getenv('ENV', 'development')
 
     # MongoDB Config
     MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/pos')
@@ -32,6 +33,7 @@ class Config:
     MAIL_PORT = int(os.getenv('MAIL_PORT', 587))
     MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'your@gmail.com')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'password')
+    MAIL_DEBUG = os.getenv('MAIL_DEBUG', 'False')
 
 class ConfigManager:
     def __init__(self, db):

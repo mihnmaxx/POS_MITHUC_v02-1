@@ -5,18 +5,18 @@ import { OrderFilters } from '@/components/orders/OrderFilters'
 import { useState } from 'react'
 
 interface Filters {
-    status: string
-    startDate: string
-    endDate: string
-    search: string
-  }
+  search: string
+  status: string
+  startDate: string
+  endDate: string
+}
 
 export default function OrdersPage() {
   const [filters, setFilters] = useState<Filters>({
+    search: '',
     status: '',
     startDate: '',
-    endDate: '',
-    search: ''
+    endDate: ''
   })
 
   return (

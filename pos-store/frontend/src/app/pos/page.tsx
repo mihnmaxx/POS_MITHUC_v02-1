@@ -40,7 +40,7 @@ export default function POSPage() {
       const updatedItems = [...cartItems]
       updatedItems[existingItemIndex] = {
         ...updatedItems[existingItemIndex],
-        quantity: (updatedItems[existingItemIndex].quantity || 1) + 1
+        stock_quantity: (updatedItems[existingItemIndex].stock_quantity || 1) + 1
       }
       setCartItems(updatedItems)
     } else {

@@ -32,7 +32,7 @@ export function CategoryForm() {
     },
   })
 
-  const { mutateAsync: createCategory, isLoading } = useCreateCategory()
+  const { mutateAsync: createCategory, isPending } = useCreateCategory()
 
   async function onSubmit(values: FormValues) {
     try {
@@ -128,9 +128,9 @@ export function CategoryForm() {
               </Button>
               <Button 
                 type="submit"
-                disabled={isLoading}
+                disabled={isPending}
               >
-                {isLoading ? 'Đang tạo...' : 'Tạo danh mục'}
+                {isPending ? 'Đang tạo...' : 'Tạo danh mục'}
               </Button>
             </div>
           </CardContent>

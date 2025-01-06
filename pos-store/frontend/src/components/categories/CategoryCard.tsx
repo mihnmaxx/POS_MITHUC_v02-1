@@ -23,7 +23,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({ category, className }: CategoryCardProps) {
   const router = useRouter()
-  const { mutateAsync: deleteCategory, isLoading } = useDeleteCategory()
+  const { mutateAsync: deleteCategory, isPending } = useDeleteCategory()
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const handleDelete = async () => {
     try {
@@ -75,7 +75,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
                 <Button 
                   variant="destructive"
                   onClick={handleDelete}
-                  disabled={isLoading}
+                  disabled={isPending}
                 >
                   Xoá
                 </Button>
