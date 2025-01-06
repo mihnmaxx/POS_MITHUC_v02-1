@@ -99,16 +99,16 @@ pytest
 
 ## Deployment
 
-1. Build Docker image:
+1. Development:
 
 
-docker build -t pos-store-backend .
+flask run
 
 
-2. Chạy container:
+2. Production với Gunicorn:
 
 
-docker run -p 5000:5000 pos-store-backend
+gunicorn --workers=4 --bind 0.0.0.0:5000 wsgi:app --timeout 120
 
 
 ## Contributing
