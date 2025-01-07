@@ -44,7 +44,7 @@ export default function POSPage() {
       }
       setCartItems(updatedItems)
     } else {
-      setCartItems(prev => [...prev, { ...product, quantity: 1 }])
+      setCartItems(prev => [...prev, { ...product, stock_quantity: 1 }])
     }
     
     playAdd()
