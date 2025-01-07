@@ -28,6 +28,31 @@ pip install -r requirements.txt
 
 - Tạo file `.env` từ file mẫu `.env.example`
 - Cập nhật các biến môi trường phù hợp
+- # MongoDB Atlas
+MONGO_URI=
+
+# Redis
+REDIS_HOST=
+REDIS_PORT=
+REDIS_DB=
+REDIS_PASSWORD=  # nếu cần
+
+# JWT
+SECRET_KEY=
+
+# SMTP
+MAIL_SERVER=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_USE_TLS=
+MAIL_USE_SSL=
+MAIL_DEBUG=
+
+# HOSTNAME
+HOSTNAME=
+ENV=
+DEBUG=
 
 ## Khởi chạy
 
