@@ -37,7 +37,13 @@ export function Cart({ items, setItems }: CartProps) {
   }
 
   const removeItem = (id: string) => {
-    setItems(items.filter(item => item._id !== id))
+      const updatedItems = items.filter(item => item._id !== id)
+      // Reset quantity về 1 khi xóa
+      const resetItems = updatedItems.map(item => ({
+          ...item,
+          stock_quantity: 1
+      }))
+      setItems(resetItems)
   }
 
   return (
@@ -128,3 +134,4 @@ export function Cart({ items, setItems }: CartProps) {
     </div>
   )
 }
+
