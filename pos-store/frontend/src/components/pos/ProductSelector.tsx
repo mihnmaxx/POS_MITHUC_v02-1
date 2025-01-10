@@ -48,7 +48,7 @@ export function ProductSelector({ onProductSelect }: ProductSelectorProps) {
             ))}
           </TabsList>
 
-          <TabsContent value={selectedCategory} className="w-full">
+          <TabsContent value={selectedCategory} className="w-full h-[calc(100vh-200px)] overflow-y-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {isLoading ? (
                 Array.from({ length: 8 }).map((_, index) => (
