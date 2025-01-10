@@ -112,7 +112,11 @@ class ProductService:
         # Validate required fields
         if not data.get('name'):
             return None
-            
+
+        # Thêm validation cho barcode    
+        if not data.get('barcode'):
+            raise ValueError("Barcode không được để trống")
+
         # Kiểm tra barcode nếu có
         if data.get('barcode'):
             existing = self.db.products.find_one({'barcode': data['barcode']})
@@ -162,6 +166,11 @@ class ProductService:
 
     def update_product(self, product_id, data):
         try:
+
+            # Thêm validation cho barcode    
+            if not data.get('barcode'):
+                raise ValueError("Barcode không được để trống")
+
             # Kiểm tra sản phẩm tồn tại
             product = self.db.products.find_one({'_id': ObjectId(product_id)})
             if not product:

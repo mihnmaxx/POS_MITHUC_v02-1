@@ -5,6 +5,7 @@ import { QueryProvider } from '@/providers/query-provider'
 import { ThemeProvider } from 'next-themes'
 import { AppSidebar } from "@/components/share/app-sidebar"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
+import { MobileNavbar } from "@/components/share/MobileNavbar"
 import { Toaster } from "@/components/ui/sonner"
 
 
@@ -35,8 +36,11 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SidebarProvider>
               <div className="flex h-screen w-full">
-                <AppSidebar />
+                <AppSidebar className="hidden md:flex" />
                 <SidebarInset className="w-full">
+                  <div className="md:hidden">
+                    <MobileNavbar />
+                  </div>
                   <main className="w-full">
                     {children}
                   </main>

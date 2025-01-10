@@ -97,6 +97,7 @@ export interface ApiResponse<T> {
     unit: string;
     image_url?: string;
     stock_quantity: number;
+    quantity: number;
     min_stock_level: number;
     max_stock_level: number;
     is_active: boolean;

@@ -149,6 +149,13 @@ class OrderService:
                     quantity=int(item_data['quantity']),
                     discount=float(item_data.get('discount', 0))
                 )
+                product = self.db.products.find_one({'_id': ObjectId(item_data['product_id'])})
+                if product:
+                    new_quantity = product['stock_quantity'] - item.quantity
+                    self.db.products.update_one(
+                        {'_id': ObjectId(item_data['product_id'])},
+                        {'$set': {'stock_quantity': new_quantity}}
+                    )
                 order_items.append(item)
 
             # Tạo order mới

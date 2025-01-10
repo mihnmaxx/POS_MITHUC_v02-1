@@ -40,11 +40,24 @@ export const ReceiptPrinter = forwardRef<ReceiptPrinterRef, ReceiptPrinterProps>
             .divider { border-top: 1px dashed #000; margin: 5px 0; }
             .item { margin: 5px 0; }
             .total { font-weight: bold; }
+            .address { font-size: 10px; text-align: center; margin: 5px 0; }
+            .product-row {
+              display: flex;
+              justify-content: space-between;
+              margin: 5px 0;
+            }
+            .product-name { width: 50%; }
+            .product-qty { width: 15%; text-align: center; }
+            .product-price { width: 35%; text-align: right; }
           </style>
         </head>
         <body>
           <div class="text-center">
             <h1>MITHUC MINIMART</h1>
+            <div class="address">
+              Địa chỉ: 310 Hùng Vương, Tân Lập, Buôn Ma Thuột<br/>
+              Hotline: 0945.826.302
+            </div>
             <div class="divider"></div>
           </div>
           
@@ -55,18 +68,27 @@ export const ReceiptPrinter = forwardRef<ReceiptPrinterRef, ReceiptPrinterProps>
 
           <div class="divider"></div>
 
+          <div class="product-row" style="font-weight: bold;">
+            <div class="product-name">Sản phẩm</div>
+            <div class="product-price">Đơn giá</div>
+            <div class="product-qty">SL</div>
+            <div class="product-price">Thành tiền</div>
+          </div>
+
           ${orderData.items?.map((item: any) => `
-            <div>
-              <p>${item.name}</p>
-              <p>${item.quantity} x ${item.price.toLocaleString()}đ = 
-                 ${(item.quantity * item.price).toLocaleString()}đ</p>
+            <div class="product-row">
+              <div class="product-name">${item.name}</div>
+              <div class="product-price">${item.price.toLocaleString()}đ</div>
+              <div class="product-qty">${item.quantity}</div>
+              <div class="product-price">${(item.quantity * item.price).toLocaleString()}đ</div>
             </div>
           `).join('')}
 
           <div class="divider"></div>
 
           <div class="text-right">
-            <p>Tổng tiền: ${orderData.total?.toLocaleString()}đ</p>
+            <p>Hình thức: ${orderData.payment_method === 'cash' ? 'Tiền mặt' : 'Chuyển khoản'}</p>
+            <p class="total">Tổng tiền: ${orderData.total?.toLocaleString()}đ</p>
           </div>
 
           <div class="text-center">

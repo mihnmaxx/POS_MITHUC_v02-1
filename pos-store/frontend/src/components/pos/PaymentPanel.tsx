@@ -36,7 +36,7 @@ export function PaymentPanel({ cart, onPaymentComplete }: PaymentPanelProps) {
       toast.error(`Số tiền tối thiểu là ${paymentMethod.min_amount.toLocaleString()}đ`)
       return
     }
-
+  
     createOrder(
       {
         items: cart.map(item => ({
