@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -17,11 +17,31 @@ interface ProductSelectorProps {
 export function ProductSelector({ onProductSelect }: ProductSelectorProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [page, setPage] = useState(1)
+  const [allProducts, setAllProducts] = useState<Product[]>([])
+
   const { data: categoriesData } = useCategories()
   const { data: productsData, isLoading } = useProducts({
     search: searchTerm,
-    category: selectedCategory !== 'all' ? selectedCategory : undefined
+    category: selectedCategory !== 'all' ? selectedCategory : undefined,
+    page: page
   })
+
+  useEffect(() => {
+    if (productsData?.products) {
+      setAllProducts(prev => {
+        const newProducts = productsData.products.filter(
+          newProduct => !prev.some(p => p._id === newProduct._id)
+        )
+        return [...prev, ...newProducts]
+      })
+    }
+  }, [productsData])
+
+  const loadMore = () => {
+    setPage(prev => prev + 1)
+  }
+
 
   return (
     <div className="w-full bg-card border border-border rounded-lg">
@@ -49,23 +69,30 @@ export function ProductSelector({ onProductSelect }: ProductSelectorProps) {
           </TabsList>
 
           <TabsContent value={selectedCategory} className="w-full h-[calc(100vh-200px)] overflow-y-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {isLoading ? (
-                Array.from({ length: 8 }).map((_, index) => (
-                  <div key={index} className="h-[320px]">
-                    <Skeleton className="h-full w-full" />
-                  </div>
-                ))
-              ) : (
-                productsData?.products.map((product) => (
-                  <div key={product._id} className="h-[320px]">
-                    <ProductCard
-                      product={product}
-                      onClick={() => onProductSelect(product)}
-                    />
-                  </div>
-                ))
-              )}
+            <div className="container mx-auto p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-8">
+                {isLoading ? (
+                  Array.from({ length: 8 }).map((_, index) => (
+                    <div key={index} className="flex-shrink-0 h-[320px] my-2">
+                      <Skeleton className="h-full w-full" />
+                    </div>
+                  ))
+                ) : (
+                  allProducts.map((product) => (
+                    <div key={product._id} className="flex-shrink-0 h-[320px] my-2">
+                      <ProductCard
+                        product={product}
+                        onClick={() => onProductSelect(product)}
+                      />
+                    </div>
+                  ))
+                )}
+              </div>
+              <div className="flex justify-center py-4 sticky bottom-0">
+                <Button variant="outline" onClick={loadMore}>
+                  Xem thêm
+                </Button>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

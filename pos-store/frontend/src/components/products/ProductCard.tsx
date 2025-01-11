@@ -34,15 +34,15 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         />
       </div>
       <CardHeader className="flex flex-row items-center justify-between">
-        <div className="font-semibold">{product.name}</div>
+        <div className="font-semibold line-clamp-2 overflow-hidden">{product.name}</div>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between">
-          <span>Giá bán:</span>
+          <span>Giá:</span>
           <span className="font-medium">{formatCurrency(product.price)}</span>
         </div>
         <div className="flex justify-between">
-          <span>Tồn kho:</span>
+          <span>kho:</span>
           <span>{product.stock_quantity} {product.unit}</span>
         </div>
       </CardContent>

@@ -5,11 +5,31 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Plus, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useProducts } from '@/hooks/use-products'
+import { Product } from '@/types/api'
+
 
 export default function ProductsPage() {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [allProducts, setAllProducts] = useState<Product[]>([])
+
+  const { data, isLoading } = useProducts({
+    search: searchTerm,
+    page: page
+  })
+
+  useEffect(() => {
+    if (data?.products) {
+      setAllProducts(prev => [...prev, ...data.products] as Product[])
+    }
+  }, [data])
+
+  const loadMore = () => {
+    setPage(prevPage => prevPage + 1)
+  }
 
   return (
     <div className="space-y-4">
@@ -31,7 +51,12 @@ export default function ProductsPage() {
           </Button>
         </div>
       </div>
-      <ProductList searchTerm={searchTerm} />
+      <ProductList data={allProducts} isLoading={isLoading} />
+      <div className="flex justify-center">
+        <Button variant="outline" onClick={loadMore}>
+          Xem thêm
+        </Button>
+      </div>
     </div>
   )
 }
