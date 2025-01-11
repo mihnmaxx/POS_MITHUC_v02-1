@@ -80,7 +80,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, onSubmit }) =
 
   const onSubmitForm = async (data: z.infer<typeof formSchema>) => {
     try {
-      let updatedData = { ...data } as z.infer<typeof formSchema> & { image_url?: string }
+      let updatedData = { 
+        ...data,
+        price: Number(data.price),
+        cost_price: Number(data.cost_price),
+        stock_quantity: Number(data.stock_quantity),
+        min_stock_level: Number(data.min_stock_level),
+        max_stock_level: Number(data.max_stock_level)
+      } as z.infer<typeof formSchema> & { image_url?: string }
       if (tempImage) {
         const response = await uploadService.uploadProductImage(tempImage)
         updatedData.image_url = response.file_id
