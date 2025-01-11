@@ -26,12 +26,12 @@ const formSchema = z.object({
   barcode: z.string().min(1, "Barcode là bắt buộc"),
   description: z.string().optional(),
   category_id: z.string().optional(),
-  price: z.number().min(0, "Giá bán phải lớn hơn 0"),
-  cost_price: z.number().min(0, "Giá vốn phải lớn hơn 0"),
+  price: z.string().transform((val) => Number(val)),
+  cost_price: z.string().transform((val) => Number(val)),
   unit: z.string().min(1, "Đơn vị tính là bắt buộc"),
-  stock_quantity: z.number().min(0, "Số lượng tồn phải lớn hơn 0"),
-  min_stock_level: z.number().min(0),
-  max_stock_level: z.number().min(0),
+  stock_quantity: z.string().transform((val) => Number(val)),
+  min_stock_level: z.string().transform((val) => Number(val)),
+  max_stock_level: z.string().transform((val) => Number(val)),
   is_active: z.boolean().default(true)
 })
 
@@ -77,21 +77,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, onSubmit }) =
       setPreview(previewUrl)
     }
   }
-
+  
   const onSubmitForm = async (data: z.infer<typeof formSchema>) => {
     try {
-      let updatedData = { 
-        ...data,
-        price: Number(data.price),
-        cost_price: Number(data.cost_price),
-        stock_quantity: Number(data.stock_quantity),
-        min_stock_level: Number(data.min_stock_level),
-        max_stock_level: Number(data.max_stock_level)
-      } as z.infer<typeof formSchema> & { image_url?: string }
+      let updatedData = { ...data } as z.infer<typeof formSchema> & { image_url?: string }
+
       if (tempImage) {
         const response = await uploadService.uploadProductImage(tempImage)
         updatedData.image_url = response.file_id
       }
+      
       await createProduct(updatedData)
       router.push('/products')
     } catch (error) {
