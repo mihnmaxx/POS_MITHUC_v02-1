@@ -1,16 +1,42 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
 import { categoryService } from '@/services/category.service'
 import { Category } from '@/types/api'
+import { fetchCategories } from '@/components/categories/CategoryList'
 
 // Hook lấy danh sách categories
-export function useCategories(params?: any) {
-  return useQuery({
-    queryKey: ['categories', params],
-    queryFn: () => categoryService.getCategories(params),
-    select: (data) => data.data
+export function useCategories({
+  search = '',
+  limit = 8
+}: {
+  search?: string;
+  limit?: number;
+} = {}) {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ['categories', search],
+    queryFn: ({ pageParam = 1 }) => fetchCategories({ search, page: pageParam as number, limit }),
+    getNextPageParam: (lastPage: { categories: any[] }, pages) => {
+      if (lastPage.categories.length < limit) return undefined
+      return pages.length + 1
+    },
+    initialPageParam: 1
   })
-}
 
+  const categories = data?.pages.flatMap(page => page.categories) || []
+
+  return {
+    data: { categories },
+    isLoading,
+    hasMore: hasNextPage,
+    loadMore: fetchNextPage,
+    isLoadingMore: isFetchingNextPage
+  }
+}
 // Hook lấy một category theo id
 export function useCategory(id: string) {
   return useQuery({

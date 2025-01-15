@@ -3,7 +3,7 @@ import { Category } from '@/types/api';
 
 export const categoryService = {
   getCategories: (params?: any) => 
-    apiClient.get('/category/', { params }),
+    apiClient.get('/category', { params }),
 
   getCategory: (id: string) => 
     apiClient.get(`/category/${id}`),
