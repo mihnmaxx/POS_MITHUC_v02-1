@@ -23,9 +23,20 @@ export default function ProductsPage() {
 
   useEffect(() => {
     if (data?.products) {
-      setAllProducts(prev => [...prev, ...data.products] as Product[])
+      // Reset products when search term changes
+      if (page === 1) {
+        setAllProducts(data.products)
+      } else {
+        setAllProducts(prev => [...prev, ...data.products])
+      }
     }
-  }, [data])
+  }, [data, page])
+
+  // Reset page when search term changes
+  useEffect(() => {
+    setPage(1)
+    setAllProducts([])
+  }, [searchTerm])
 
   const loadMore = () => {
     setPage(prevPage => prevPage + 1)

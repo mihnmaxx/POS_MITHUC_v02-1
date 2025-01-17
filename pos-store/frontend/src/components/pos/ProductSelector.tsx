@@ -27,16 +27,22 @@ export function ProductSelector({ onProductSelect }: ProductSelectorProps) {
     page: page
   })
 
+  // Reset dữ liệu khi thay đổi tìm kiếm hoặc danh mục
+  useEffect(() => {
+    setPage(1)
+    setAllProducts([])
+  }, [searchTerm, selectedCategory])
+
+  // Cập nhật danh sách sản phẩm
   useEffect(() => {
     if (productsData?.products) {
-      setAllProducts(prev => {
-        const newProducts = productsData.products.filter(
-          newProduct => !prev.some(p => p._id === newProduct._id)
-        )
-        return [...prev, ...newProducts]
-      })
+      if (page === 1) {
+        setAllProducts(productsData.products)
+      } else {
+        setAllProducts(prev => [...prev, ...productsData.products])
+      }
     }
-  }, [productsData])
+  }, [productsData, page])
 
   const loadMore = () => {
     setPage(prev => prev + 1)
