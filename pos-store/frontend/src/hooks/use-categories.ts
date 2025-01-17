@@ -6,7 +6,7 @@ import { fetchCategories } from '@/components/categories/CategoryList'
 // Hook lấy danh sách categories
 export function useCategories({
   search = '',
-  limit = 8
+  limit = 100
 }: {
   search?: string;
   limit?: number;

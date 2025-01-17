@@ -61,13 +61,13 @@ export function ProductSelector({ onProductSelect }: ProductSelectorProps) {
         />
         
         <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-          <TabsList className="w-full flex mb-4 overflow-x-auto [&::-webkit-scrollbar]{display:none} [-ms-overflow-style:none] [scrollbar-width:none]">
+          <TabsList className="w-full flex mb-4 overflow-x-auto flex-nowrap [&::-webkit-scrollbar]{display:none} [-ms-overflow-style:none] [scrollbar-width:none]">
             <TabsTrigger value="all" className="flex-1">Tất cả</TabsTrigger>
-            {categoriesData?.categories?.map((category: { _id: string; name: string }) => (
+            {categoriesData?.categories?.map((category) => (
               <TabsTrigger 
                 key={category._id} 
                 value={category._id}
-                className="flex-1"
+                className="flex-1 whitespace-nowrap"
               >
                 {category.name}
               </TabsTrigger>
